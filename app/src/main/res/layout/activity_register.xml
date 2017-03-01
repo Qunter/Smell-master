@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 注册页面 -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/loading"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_white"
+        android:orientation="vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:id="@+id/register_custom"
+            android:drawableRight="@drawable/ic_accent"
+            android:drawablePadding="5dp"
+            android:hint="自定义帐号"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:id="@+id/register_password"
+            android:drawableRight="@drawable/ic_lock_open"
+            android:drawablePadding="5dp"
+            android:inputType="textPassword"
+            android:hint="设置密码"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:id="@+id/register_phone"
+            android:drawableRight="@drawable/ic_phone"
+            android:drawablePadding="5dp"
+            android:hint="手机号码"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:id="@+id/register_nickname"
+            android:drawableRight="@drawable/ic_accent"
+            android:drawablePadding="5dp"
+            android:hint="昵称"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:id="@+id/register_enroll"
+            android:background="@drawable/bg_btn"
+            android:textColor="@color/colorWhite"
+            android:text="注册"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:id="@+id/register_login"
+            android:background="@drawable/bg_btn"
+            android:textColor="@color/colorWhite"
+            android:text="已有帐号，立即登录"/>
+
+    </LinearLayout>
+
+</FrameLayout>
