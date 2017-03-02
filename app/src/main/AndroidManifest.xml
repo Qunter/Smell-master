@@ -177,6 +177,11 @@
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="InnerclassSeparator" />
+        <!--添加好友查询用户消息页面-->
+        <activity android:name=".Activity.ChatCenter.UserSearch"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="InnerclassSeparator"/>
         <activity
             android:name=".Activity.ChatCenter.RongTt.ConversationActivity"
             android:screenOrientation="portrait"

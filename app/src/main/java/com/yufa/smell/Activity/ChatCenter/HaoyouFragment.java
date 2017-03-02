@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.yufa.smell.Activity.ChatCenter.RongTt.Friend;
 import com.yufa.smell.Activity.ChatCenter.RongTt.FriendFragment;
 import com.yufa.smell.Activity.ChatCenter.RongTt.HomeActivity;
+import com.yufa.smell.Entity.UserInformation;
 import com.yufa.smell.R;
 
 
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bmob.v3.BmobUser;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
@@ -42,6 +44,8 @@ public class HaoyouFragment extends Fragment implements View.OnClickListener,Ron
     Button btTwo;
     View chatView;
     LinearLayout customerBtn;
+    private static String userID = "";
+    private static String userToken = "";
     private static final String token1 = "dHGn5hbkp2uoaGNdM/ndPLU/IPKPq/4/rzu3rTMXUSRCNEJ9ciLWMJHPIuBZ/kIF0Ei/ZppjqKA82Y/G7o2WKw==";
     private static final String token2 = "Ps5gvQxrr/UEeIECd0Kw1zJ7fQsmkAfr2qQ8WWBA7zjOEK9cnoCpmZx1FAJl2gSKy6VzMTjO7eEo3nR7ttm0mA==";
     private static final String kefuToken = "vCYACJZW6N+6n/bWxTKJa7U/IPKPq/4/rzu3rTMXUSRr+45pWdMmjRNZqGa9SzdWUlX6awVGkOS9UH4AMaCELA==";
@@ -61,7 +65,8 @@ public class HaoyouFragment extends Fragment implements View.OnClickListener,Ron
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState){
         super.onCreateView(inflater, container, savedInstanceState);
         chatView = inflater.inflate(R.layout.fragment_haoyou, container,false);
-        initUserInfo();
+        //initUserInfo();
+        initUserToken();
         return chatView;
 
 
@@ -71,6 +76,7 @@ public class HaoyouFragment extends Fragment implements View.OnClickListener,Ron
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
+
         btOne = (Button) chatView.findViewById(R.id.mBtOne);
         btTwo = (Button) chatView.findViewById(R.id.mBtTwo);
         customerBtn = (LinearLayout) chatView.findViewById(R.id.kefuBtn);
@@ -88,15 +94,18 @@ public class HaoyouFragment extends Fragment implements View.OnClickListener,Ron
             connectRongServer(token2);
         } else if (v.getId() == R.id.kefuBtn){
             if (RongIM.getInstance()!=null){
-                //直接连token然后打开聊天窗
-                connectRongServer(token1);
                 //RongIM.getInstance().startConversation(getActivity(), Conversation.ConversationType.APP_PUBLIC_SERVICE, "KEFU", "官方客服");
                 //RongIM.getInstance().startConversation(getActivity(), Conversation.ConversationType.APP_PUBLIC_SERVICE, "10086", "移动");
                 RongIM.getInstance().startPrivateChat(getActivity(), "10086", "移动");
             }
         }
     }
-
+    private void initUserToken(){
+        UserInformation loginUser = BmobUser.getCurrentUser(UserInformation.class);
+        userID = loginUser.getPhone();
+        userToken = loginUser.getToken();
+        connectRongServer(loginUser.getToken());
+    }
     private void connectRongServer(String token) {
 
         RongIM.connect(token, new RongIMClient.ConnectCallback() {
@@ -106,7 +115,9 @@ public class HaoyouFragment extends Fragment implements View.OnClickListener,Ron
                     btOne.setText("ONE连接服务器成功");
                     //startActivity(new Intent(getContext(), HomeActivity.class));
                     Toast.makeText(getContext(), "connect server success 10010", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if (userId.equals(userID)){
+                    Toast.makeText(getContext(), userID+"成功连接", Toast.LENGTH_SHORT).show();
+                }else {
                     btTwo.setText("TWO连接服务器成功");
                     startActivity(new Intent(getContext(), HomeActivity.class));
                     Toast.makeText(getContext(), "connect server success 10086", Toast.LENGTH_SHORT).show();

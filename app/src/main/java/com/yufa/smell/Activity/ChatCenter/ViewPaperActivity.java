@@ -220,6 +220,7 @@ public class ViewPaperActivity extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.friend_add:
+                startActivity(UserSearch.class);
                 break;
             case R.id.friendList_persion:
                 break;
