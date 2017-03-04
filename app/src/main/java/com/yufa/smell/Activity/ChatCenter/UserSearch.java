@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -15,12 +16,11 @@ import android.widget.Toast;
 
 import com.yufa.smell.Activity.BaseActivity;
 import com.yufa.smell.CustomView.CircleView;
+import com.yufa.smell.Entity.UserFriend;
 import com.yufa.smell.Entity.UserInformation;
 import com.yufa.smell.R;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -29,8 +29,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by Administrator on 2017/3/2.
@@ -44,9 +47,11 @@ public class UserSearch extends BaseActivity {
     @BindView(R.id.resetBtn)
     Button resetBtn;
     LinearLayout userSearchLinLayout;
-    final int ADDFRIENDASK=0x00,DELFRIENDASK=0x01;
+    final int ADDFRIENDASK=0x00,DELFRIENDASK=0x01, IFGETFRIENDLIST =0x02,NOGETFRIENDLIST =0x03;
     String txUrl,name;
     LinearLayout friendView;
+    UserInformation searchUser;
+    String loginUserFriendObjectID="";
     //用于标记是否已显示用户信息
     int flag=0;
     private Handler handler=new Handler(){
@@ -54,6 +59,14 @@ public class UserSearch extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
+                case IFGETFRIENDLIST:
+                    searchUserFriendInformation();
+
+                    break;
+                case NOGETFRIENDLIST:
+                    Toast.makeText(getApplicationContext(), "执行NOGETFRIENDLIST", Toast.LENGTH_SHORT).show();
+                    buildUserFriendList();
+                    break;
                 case ADDFRIENDASK:
                     if(flag==1) {
                         userSearchLinLayout.removeView(friendView);
@@ -77,8 +90,8 @@ public class UserSearch extends BaseActivity {
         super.initViews();
         setContentView(R.layout.acticity_usersearch);
         userSearchLinLayout = (LinearLayout) findViewById(R.id.userSearchLinLayout);
-        //用hander添加一个自定义控件----未完成！
         ButterKnife.bind(this);
+        handler.sendEmptyMessage(IFGETFRIENDLIST);
     }
     @OnClick({R.id.seachBtn, R.id.resetBtn})
     public void onClick(View view) {
@@ -102,13 +115,52 @@ public class UserSearch extends BaseActivity {
             @Override
             public void done(List<UserInformation> object, BmobException e) {
                 if(e==null){
-                    UserInformation user =object.get(0);
-                    txUrl = user.getImage();
-                    name = user.getNickName();
+                    searchUser =object.get(0);
+                    txUrl = searchUser.getImage();
+                    name = searchUser.getNickName();
                     handler.sendEmptyMessage(ADDFRIENDASK);
                     //Toast.makeText(getApplicationContext(), user.getNickName()+"查询成功", Toast.LENGTH_SHORT).show();
                 }else{
                     //Toast.makeText(getApplicationContext(), "查询失败"+e, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    /**
+     * bmob查询某用户好友信息
+     */
+    private void searchUserFriendInformation(){
+        final BmobQuery<UserFriend> query = new BmobQuery<UserFriend>();
+        query.addWhereEqualTo("userID", BmobUser.getCurrentUser(UserInformation.class).getPhone());
+        query.findObjects(new FindListener<UserFriend>() {
+            @Override
+            public void done(List<UserFriend> object, BmobException e) {
+                if(e==null){
+                    loginUserFriendObjectID =object.get(0).getObjectId();
+                }else{
+                    handler.sendEmptyMessage(NOGETFRIENDLIST);
+                }
+            }
+        });
+    }
+    /**
+     * 如果用户此前没有生成好友列表的情况下，执行方法生成好友列表
+     */
+    private void buildUserFriendList(){
+        UserInformation loginUser = BmobUser.getCurrentUser(UserInformation.class);
+        String loginUserID = loginUser.getPhone();
+        UserFriend userFriend = new UserFriend();
+        userFriend.setUserID(loginUserID);
+        BmobRelation relation = new BmobRelation();
+        userFriend.setUserFriend(relation);
+        userFriend.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if(e==null){
+                    //Toast.makeText(getApplicationContext(), "执行", Toast.LENGTH_SHORT).show();
+                    handler.sendEmptyMessage(IFGETFRIENDLIST);
+                }else{
+                    //Toast.makeText(getApplicationContext(), e+"错误", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -136,6 +188,30 @@ public class UserSearch extends BaseActivity {
         btnparams.setMargins(30,0,30,0);
         Button add = new Button(this);
         add.setText("添加好友");
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserFriend userFriend = new UserFriend();
+                userFriend.setObjectId(loginUserFriendObjectID);
+                BmobRelation relation = new BmobRelation();
+                //将当前用户添加到多对多关联中
+                relation.add(searchUser);
+                //多对多关联指向`post`的`likes`字段
+                userFriend.setUserFriend(relation);
+                userFriend.update(new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if(e==null){
+                            Toast.makeText(getApplicationContext(), "添加成功", Toast.LENGTH_SHORT).show();
+                        }else{
+                            //Toast.makeText(getApplicationContext(), e+"添加失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), loginUserFriendObjectID, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                });
+            }
+        });
         add.setLayoutParams(btnparams);
         add.setGravity(Gravity.CENTER_VERTICAL);
         Button noAdd = new Button(this);

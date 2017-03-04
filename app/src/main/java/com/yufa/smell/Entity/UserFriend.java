@@ -8,11 +8,11 @@ import cn.bmob.v3.datatype.BmobRelation;
  */
 
 public class UserFriend extends BmobObject {
-    private UserInformation userIF;
-    private BmobRelation userFriend;
+    private String userID;
+    private BmobRelation  userFriend;
 
 
-    public BmobRelation getUserFriend() {
+    public BmobRelation  getUserFriend() {
         return userFriend;
     }
 
@@ -20,11 +20,11 @@ public class UserFriend extends BmobObject {
         this.userFriend = userFriend;
     }
 
-    public UserInformation getUserIF() {
-        return userIF;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setUserIF(UserInformation userIF) {
-        this.userIF = userIF;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 }
