@@ -64,7 +64,7 @@ public class UserSearch extends BaseActivity {
 
                     break;
                 case NOGETFRIENDLIST:
-                    Toast.makeText(getApplicationContext(), "执行NOGETFRIENDLIST", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "执行NOGETFRIENDLIST", Toast.LENGTH_SHORT).show();
                     buildUserFriendList();
                     break;
                 case ADDFRIENDASK:
