@@ -34,6 +34,7 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
 import com.yufa.smell.Activity.ChatCenter.FriendListActivity;
 import com.yufa.smell.Activity.ChatCenter.ViewPaperActivity;
+import com.yufa.smell.Activity.LoginAndRegister.LoginActivity;
 import com.yufa.smell.Activity.SettingCenter.SettingActivity;
 import com.yufa.smell.Entity.MenuItem;
 import com.yufa.smell.Entity.Smell;
@@ -46,12 +47,15 @@ import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobGeoPoint;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
 
+import static cn.bmob.v3.BmobConstants.TAG;
 import static com.amap.api.maps2d.AMapOptions.LOGO_POSITION_BOTTOM_RIGHT;
 
 /**
@@ -91,6 +95,8 @@ public class MapActivity extends Activity implements LocationSource,
     //菜单列表的布局
     private RelativeLayout menuList;
     //用于恢复被点击按钮的颜色
+    //登录用户的融云userID
+    private String userID;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -131,6 +137,7 @@ public class MapActivity extends Activity implements LocationSource,
         RongIM.init(this);//初始化融云服务
         setContentView(R.layout.activity_map);
         Bmob.initialize(this,"f0fc59a153ba369c31798409902688bd");
+        initUserToken();
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         initViews();
@@ -200,7 +207,9 @@ public class MapActivity extends Activity implements LocationSource,
     }
 
     private void qipao(){
-        showDialog();
+        Intent intent = new Intent();
+        intent.setClass(MapActivity.this,AddChatActivity.class);
+        startActivity(intent);
     }
     private void qiwei(){
         Intent intent = new Intent();
@@ -396,6 +405,7 @@ public class MapActivity extends Activity implements LocationSource,
         final View view = layoutInflater.inflate(R.layout.content_selectmenu,null);
         RadioGroup group = (RadioGroup) view.findViewById(R.id.qipao_group);
         final Intent intent = new Intent();
+        intent.setClass(MapActivity.this,AddChatActivity.class);
         intent.putExtra("Latitude",aMapLocation.getLatitude());
         intent.putExtra("Longitude",aMapLocation.getLongitude());
         group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -486,5 +496,48 @@ public class MapActivity extends Activity implements LocationSource,
             mlocationClient.onDestroy();
         }
         mlocationClient = null;
+    }
+
+    /**
+     * 获取登录用户的融云token
+     */
+    private void initUserToken(){
+        UserInformation loginUser = BmobUser.getCurrentUser(UserInformation.class);
+        userID = loginUser.getPhone();
+        connectRongServer(loginUser.getToken());
+    }
+
+    /**
+     * 初始化登录用户的融云服务
+     */
+    private void connectRongServer(String token) {
+
+        RongIM.connect(token, new RongIMClient.ConnectCallback() {
+            @Override
+            public void onSuccess(String userId) {
+                if (userId.equals(userID)){
+                    Toast.makeText(MapActivity.this, userID+"成功连接", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MapActivity.this, userID+"连接失败", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+
+            @Override
+            public void onError(RongIMClient.ErrorCode errorCode) {
+                // Log.e("onError", "onError userid:" + errorCode.getValue());//获取错误的错误码
+                Toast.makeText(MapActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "connect failure errorCode is : " + errorCode.getValue());
+            }
+
+
+            @Override
+            public void onTokenIncorrect() {
+                Toast.makeText(MapActivity.this, "TokenError", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "token is error ,please check token and appkey");
+            }
+        });
+
     }
 }

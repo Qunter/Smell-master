@@ -129,13 +129,13 @@ public class ImageLoader {
     /**
      * AsyncTask异步线程
      */
-    public void showImageByAsyncTask(ImageView imageView, String url) {
+    public void showImageByAsyncTask(ImageView imageView, String url,int position) {
         //从缓存中取出图片
         Bitmap bitmap = getBitmapByCache(url);
         //如果缓存中没有则通过异步线程下载
         if (bitmap == null) {
-//            new NewsAsyncTask(url).execute(url);
-            imageView.setImageResource(R.mipmap.ic_launcher);
+            new NewsAsyncTask(position).execute(url);
+            //imageView.setImageResource(R.mipmap.ic_launcher);
         } else {
             imageView.setImageBitmap(bitmap);
         }
@@ -169,7 +169,7 @@ public class ImageLoader {
             //如果缓存中没有则通过异步线程下载
             if (bitmap == null) {
 //                new NewsAsyncTask(imageView, url).execute(url);
-                NewsAsyncTask task = new NewsAsyncTask(url);
+                NewsAsyncTask task = new NewsAsyncTask(i);
                 task.execute(url);
                 mTask.add(task);//启动之后将task传入task管理表mTask中
             } else {
@@ -181,12 +181,12 @@ public class ImageLoader {
     }
 
     private class NewsAsyncTask extends AsyncTask<String, Void, Bitmap> {
-        private String mUrl;
+        private int mPosition;
 //        private ImageView mImageView;
 
-        public NewsAsyncTask(String url) {//不再需要传入ImageView，可从ListView中去获取
+        public NewsAsyncTask(int position) {//不再需要传入ImageView，可从ListView中去获取
 //            mImageView = imageView;
-            mUrl = url;
+            mPosition = position;
         }
 
         @Override
@@ -207,7 +207,7 @@ public class ImageLoader {
 //            if (mImageView.getTag().equals(mUrl)) {
 //                mImageView.setImageBitmap(bitmap);
 //            }
-            ImageView imageView = (ImageView) mListView.findViewWithTag(mUrl);
+            ImageView imageView = (ImageView) mListView.findViewWithTag(mPosition);
             if (imageView != null && bitmap != null){
                 imageView.setImageBitmap(bitmap);
             }

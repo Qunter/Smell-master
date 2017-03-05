@@ -25,10 +25,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.SaveListener;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
+
+import static cn.bmob.v3.BmobConstants.TAG;
 
 /**
  *
@@ -48,7 +53,6 @@ public class LoginActivity extends BaseActivity {
     Button loginForget;
     @BindView(R.id.same)
     CircleView same;
-
     @Override
     public void initViews() {
         super.initViews();
@@ -185,4 +189,5 @@ public class LoginActivity extends BaseActivity {
         });
         builder.create().show();
     }
+
 }

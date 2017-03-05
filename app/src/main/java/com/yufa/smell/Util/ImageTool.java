@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -56,6 +57,28 @@ public class ImageTool {
             return image;
         }
         return null;
+    }
+
+    public BmobFile saveBitmapFile(Intent data){
+        BmobFile image;
+        Bundle bundle = data.getExtras();
+        Bitmap bitmap = (Bitmap) bundle.get("data");
+        File file=new File(Environment.getExternalStorageDirectory(),name);//将要保存图片的路径
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        image = new BmobFile(file);
+        return image;
+    }
+
+    public Intent getImageFromCamera(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        return intent;
     }
 
     public Intent getImageFromAlbum() {
@@ -118,10 +141,10 @@ public class ImageTool {
 
     public ImageTool(Context context, String type){
         SharedPreferencesHelper sph = SharedPreferencesHelper.getInstance(context);
-        String username = sph.getString("username", "");
+        String account = sph.getString("account", "");
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date curDate = new Date(System.currentTimeMillis());//获取当前时间
         String time = sDateFormat.format(curDate);
-        name = username + "-" + type + "-" + time + ".png";
+        name = account + "-" + type + "-" + time + ".png";
     }
 }

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.yufa.smell.Activity.ChatCenter.HaoyouFragment;
 import com.yufa.smell.Activity.ChatCenter.ImageLoader;
 import com.yufa.smell.Activity.ChatCenter.RongTt.Friend;
 import com.yufa.smell.Entity.UserInformation;
@@ -40,6 +41,7 @@ public class FriendAdapter extends BaseAdapter implements AbsListView.OnScrollLi
     public FriendAdapter(Context context, List<UserInformation> data, ListView listView) {
         mList = data;
         mInflater = LayoutInflater.from(context);
+        initUserInfo();
         mImageLoader = new ImageLoader(listView);
         URLS = new String[data.size()];
         for (int i = 0; i < data.size(); i ++){
@@ -86,7 +88,7 @@ public class FriendAdapter extends BaseAdapter implements AbsListView.OnScrollLi
      * 重写getView方法，并通过构造ViewHolder和利用ConvertView缓存提高性能
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
@@ -98,14 +100,16 @@ public class FriendAdapter extends BaseAdapter implements AbsListView.OnScrollLi
             viewHolder = (ViewHolder) convertView.getTag();
         }
         String url = mList.get(position).getImage();
-        viewHolder.userFriendImg.setTag(url);
+        //viewHolder.userFriendImg.setTag(url);
+        viewHolder.userFriendImg.setTag(position);
 //        new ImageLoader().showImageByThread(viewHolder.ivIcon, url);
-        mImageLoader.showImageByAsyncTask(viewHolder.userFriendImg, url);
+        mImageLoader.showImageByAsyncTask(viewHolder.userFriendImg, url,position);
         viewHolder.userFriendNickName.setText(mList.get(position).getNickName());
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("onClick", "onClick:");
+                //Log.e("onClick", "onClick:");
+                RongIM.getInstance().startPrivateChat(mInflater.getContext(), mList.get(position).getPhone(), mList.get(position).getNickName());
             }
         });
         return convertView;
@@ -159,10 +163,12 @@ public class FriendAdapter extends BaseAdapter implements AbsListView.OnScrollLi
      */
     private void initUserInfo() {
         userIdList = new ArrayList<Friend>();
-        userIdList.add(new Friend("10010", "联通", "http://bmob-cdn-8854.b0.upaiyun.com/2017/01/21/910615c0405f9bd280350b57f8dc180c.png"));//联通图标
-        userIdList.add(new Friend("10086", "移动", "http://bmob-cdn-8854.b0.upaiyun.com/2017/01/21/910615c0405f9bd280350b57f8dc180c.png"));//移动图标
-        userIdList.add(new Friend("KEFU","官方客服","http://img02.tooopen.com/Download/2010/5/22/20100522103223994012.jpg"));
-        //Token:vCYACJZW6N+6n/bWxTKJa7U/IPKPq/4/rzu3rTMXUSRr+45pWdMmjRNZqGa9SzdWUlX6awVGkOS9UH4AMaCELA==
+        UserInformation userFriendInformation;
+        for (int i=0;i<mList.size();i++){
+            userFriendInformation = mList.get(i);
+            //好友内容为:id,昵称,头像url
+            userIdList.add(new Friend(userFriendInformation.getPhone(),userFriendInformation.getNickName(),userFriendInformation.getImage()));
+        }
         RongIM.setUserInfoProvider(this, true);
     }
     @Override

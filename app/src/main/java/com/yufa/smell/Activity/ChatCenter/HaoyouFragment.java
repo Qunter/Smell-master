@@ -88,7 +88,8 @@ public class HaoyouFragment extends Fragment implements RongIM.UserInfoProvider{
         super.onCreateView(inflater, container, savedInstanceState);
         chatView = inflater.inflate(R.layout.fragment_haoyou, container,false);
         //initUserInfo();
-        initUserToken();
+        //获取登录用户token以及初始化融云服务，已转移至mapactivity，此处仅供备份
+        //initUserToken();
         friendLv = (ListView) chatView.findViewById(R.id.friendLv);
         getLoginUserFriendObjectID();
         //initFriendListViewAdapter();
@@ -123,10 +124,10 @@ public class HaoyouFragment extends Fragment implements RongIM.UserInfoProvider{
         }
     }
     */
+    /*
     private void initUserToken(){
         UserInformation loginUser = BmobUser.getCurrentUser(UserInformation.class);
         userID = loginUser.getPhone();
-        userToken = loginUser.getToken();
         connectRongServer(loginUser.getToken());
     }
     private void connectRongServer(String token) {
@@ -134,16 +135,10 @@ public class HaoyouFragment extends Fragment implements RongIM.UserInfoProvider{
         RongIM.connect(token, new RongIMClient.ConnectCallback() {
             @Override
             public void onSuccess(String userId) {
-                if (userId.equals("10010")) {
-                    btOne.setText("ONE连接服务器成功");
-                    //startActivity(new Intent(getContext(), HomeActivity.class));
-                    Toast.makeText(getContext(), "connect server success 10010", Toast.LENGTH_SHORT).show();
-                } else if (userId.equals(userID)){
+                if (userId.equals(userID)){
                     Toast.makeText(getContext(), userID+"成功连接", Toast.LENGTH_SHORT).show();
                 }else {
-                    btTwo.setText("TWO连接服务器成功");
-                    startActivity(new Intent(getContext(), HomeActivity.class));
-                    Toast.makeText(getContext(), "connect server success 10086", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), userID+"连接失败", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -165,7 +160,7 @@ public class HaoyouFragment extends Fragment implements RongIM.UserInfoProvider{
         });
 
     }
-
+    */
     private void initUserInfo() {
         userIdList = new ArrayList<Friend>();
         userIdList.add(new Friend("10010", "联通", "http://bmob-cdn-8854.b0.upaiyun.com/2017/01/21/910615c0405f9bd280350b57f8dc180c.png"));//联通图标
