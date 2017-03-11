@@ -123,42 +123,6 @@ public class LoginActivity extends BaseActivity {
                         }
                     }
                 });
-                /*
-                loginUser.loginByAccount("username", "用户密码", new LogInListener<UserInformation>() {
-                    @Override
-                    public void done(UserInformation userInformation, BmobException e) {
-                        if(userInformation!=null){
-                            Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
-                            startActivity(MapActivity.class);
-                            finish();
-                            //Log.i("smile","用户登陆成功");
-                        }else{
-                            Toast.makeText(LoginActivity.this,"登录失败",Toast.LENGTH_SHORT).show();
-                            Log.e("失败代码",e.toString());
-                        }
-                    }
-                });
-                */
-                /*
-                BmobQuery<UserInformation> query = new BmobQuery<UserInformation>();
-                query.addWhereEqualTo("username",username);
-                query.addWhereEqualTo("password",password);
-                query.findObjects(new FindListener<UserInformation>() {
-                    @Override
-                    public void done(List<UserInformation> list, BmobException e) {
-                        Log.d("----->","" + list.size());
-                        if (e==null&&list.size()!=0){
-                            SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(LoginActivity.this);
-                            sharedPreferencesHelper.putString("username",loginUsername.getText().toString().trim());
-                            sharedPreferencesHelper.putString("password",loginPassword.getText().toString().trim());
-                            startActivity(MapActivity.class);
-                            finish();
-                        }else {
-                            showDialog();
-                        }
-                    }
-                });
-                */
                 break;
             case R.id.login_forget:
                 startActivity(RePasswordActivity.class);

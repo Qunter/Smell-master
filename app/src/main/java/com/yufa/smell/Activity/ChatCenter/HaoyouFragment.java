@@ -47,18 +47,11 @@ public class HaoyouFragment extends Fragment implements RongIM.UserInfoProvider{
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
-    Button btOne;
-    Button btTwo;
+
     View chatView;
-    LinearLayout customerBtn;
     ListView friendLv;
     List<UserInformation> userFriendInformationList;
     private String loginUserFriendObjectID;
-    private static String userID = "";
-    private static String userToken = "";
-    private static final String token1 = "dHGn5hbkp2uoaGNdM/ndPLU/IPKPq/4/rzu3rTMXUSRCNEJ9ciLWMJHPIuBZ/kIF0Ei/ZppjqKA82Y/G7o2WKw==";
-    private static final String token2 = "Ps5gvQxrr/UEeIECd0Kw1zJ7fQsmkAfr2qQ8WWBA7zjOEK9cnoCpmZx1FAJl2gSKy6VzMTjO7eEo3nR7ttm0mA==";
-    private static final String kefuToken = "vCYACJZW6N+6n/bWxTKJa7U/IPKPq/4/rzu3rTMXUSRr+45pWdMmjRNZqGa9SzdWUlX6awVGkOS9UH4AMaCELA==";
     private List<Friend> userIdList;
     private final int FRIENDINFORMATIONLISTDOWNOVER=0x05,GETLOGINUSERFRIENDLIST=0x06;
     private Handler handler = new Handler(){
@@ -103,64 +96,8 @@ public class HaoyouFragment extends Fragment implements RongIM.UserInfoProvider{
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        /*
-        customerBtn = (LinearLayout) chatView.findViewById(R.id.kefuBtn);
-        customerBtn.setOnClickListener(this);
-        */
     }
     /*
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.mBtOne) {
-            connectRongServer(token1);
-        } else if (v.getId() == R.id.mBtTwo) {
-            connectRongServer(token2);
-        } else if (v.getId() == R.id.kefuBtn){
-            if (RongIM.getInstance()!=null){
-                //RongIM.getInstance().startConversation(getActivity(), Conversation.ConversationType.APP_PUBLIC_SERVICE, "KEFU", "官方客服");
-                //RongIM.getInstance().startConversation(getActivity(), Conversation.ConversationType.APP_PUBLIC_SERVICE, "10086", "移动");
-                RongIM.getInstance().startPrivateChat(getActivity(), "10086", "移动");
-            }
-        }
-    }
-    */
-    /*
-    private void initUserToken(){
-        UserInformation loginUser = BmobUser.getCurrentUser(UserInformation.class);
-        userID = loginUser.getPhone();
-        connectRongServer(loginUser.getToken());
-    }
-    private void connectRongServer(String token) {
-
-        RongIM.connect(token, new RongIMClient.ConnectCallback() {
-            @Override
-            public void onSuccess(String userId) {
-                if (userId.equals(userID)){
-                    Toast.makeText(getContext(), userID+"成功连接", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(getContext(), userID+"连接失败", Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-
-            @Override
-            public void onError(RongIMClient.ErrorCode errorCode) {
-                // Log.e("onError", "onError userid:" + errorCode.getValue());//获取错误的错误码
-                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "connect failure errorCode is : " + errorCode.getValue());
-            }
-
-
-            @Override
-            public void onTokenIncorrect() {
-                Toast.makeText(getContext(), "TokenError", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "token is error ,please check token and appkey");
-            }
-        });
-
-    }
-    */
     private void initUserInfo() {
         userIdList = new ArrayList<Friend>();
         userIdList.add(new Friend("10010", "联通", "http://bmob-cdn-8854.b0.upaiyun.com/2017/01/21/910615c0405f9bd280350b57f8dc180c.png"));//联通图标
@@ -169,6 +106,7 @@ public class HaoyouFragment extends Fragment implements RongIM.UserInfoProvider{
         //Token:vCYACJZW6N+6n/bWxTKJa7U/IPKPq/4/rzu3rTMXUSRr+45pWdMmjRNZqGa9SzdWUlX6awVGkOS9UH4AMaCELA==
         RongIM.setUserInfoProvider(this, true);
     }
+    */
     @Override
     public UserInfo getUserInfo(String s) {
 
@@ -183,6 +121,7 @@ public class HaoyouFragment extends Fragment implements RongIM.UserInfoProvider{
         Log.e("MainActivity", "UserId is : " + s);
         return null;
     }
+
     /**
      * 获取用户好友列表的数据库表单中ID
      */

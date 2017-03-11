@@ -392,12 +392,12 @@
         "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u1f3c0.png"
     },
     {
-        "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u1f62f.png",
-        "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u1f62f.png"
-    },
-    {
         "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u1f624.png",
         "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u1f624.png"
+    },
+    {
+        "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u1f62f.png",
+        "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u1f62f.png"
     },
     {
         "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_unread_remind_without_count.png",
@@ -728,12 +728,12 @@
         "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_file_icon_picture.png"
     },
     {
-        "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_ic_setting_friends_add.png",
-        "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_ic_setting_friends_add.png"
-    },
-    {
         "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u1f4b0.png",
         "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u1f4b0.png"
+    },
+    {
+        "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_ic_setting_friends_add.png",
+        "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_ic_setting_friends_add.png"
     },
     {
         "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_ic_volume_5.png",
@@ -1304,12 +1304,12 @@
         "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u1f004.png"
     },
     {
-        "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_ext_location_back_icon.png",
-        "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_ext_location_back_icon.png"
-    },
-    {
         "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_cs_group_cancel_pressed.png",
         "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_cs_group_cancel_pressed.png"
+    },
+    {
+        "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_ext_location_back_icon.png",
+        "source": "F:\\Smell-master\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_ext_location_back_icon.png"
     },
     {
         "merged": "F:\\Smell-master\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_ic_setting_friends_delete.png",

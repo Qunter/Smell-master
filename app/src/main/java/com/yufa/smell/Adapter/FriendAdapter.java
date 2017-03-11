@@ -24,10 +24,6 @@ import java.util.List;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
 
-/**
- * Created by xiong on 2017/2/18.
- * 构造适配器
- */
 
 public class FriendAdapter extends BaseAdapter implements AbsListView.OnScrollListener,RongIM.UserInfoProvider{
     private List<UserInformation> mList;

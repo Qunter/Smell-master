@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.yufa.smell.Activity.BaseActivity;
 import com.yufa.smell.Entity.DiscussionIfm;
-import com.yufa.smell.Entity.UserDiscussion;
+import com.yufa.smell.Entity.UserDis;
 import com.yufa.smell.Entity.UserFriend;
 import com.yufa.smell.Entity.UserInformation;
 import com.yufa.smell.R;
@@ -46,14 +46,19 @@ public class AddChatActivity extends BaseActivity implements View.OnClickListene
     private boolean[] discussionPeopleIDBoolean;
     private List<UserInformation> userFriendInformationList;
     private DiscussionIfm discussionInformation = new DiscussionIfm(),discussion;
-    private String discussionObjectID;
     private final int DISCUSSIONNAMEIFNULL=0x07,DISCUSSIONNAMEISRIGHT=0x08,GETLOGINUSERFRIENDLIST=0x09,FRIENDINFORMATIONLISTDOWNOVER=0x10,SAVEDISCUSSIONINFORMATION=0x11,GETDISCUSSIONOBJECTID=0x12,
-            SAVEUSERDISCUSSION=0x13,IFGETDISCUSSIONLIST=0X14,NOGETDISCUSSIONLIST=0X15;
+            SAVEUSERDISCUSSION=0x13,IFGETDISCUSSIONLIST=0x14,NOGETDISCUSSIONLIST=0x15;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
+                case IFGETDISCUSSIONLIST:
+                    searchUserDiscussion();
+                    break;
+                case NOGETDISCUSSIONLIST:
+                    buildUserDiscussionList();
+                    break;
                 case DISCUSSIONNAMEIFNULL:
                     if(discussionNameEt.getText().toString().equals(""))
                         Toast.makeText(getApplicationContext(), "讨论组名称不可为空  请重新输入", Toast.LENGTH_SHORT).show();
@@ -63,26 +68,20 @@ public class AddChatActivity extends BaseActivity implements View.OnClickListene
                 case DISCUSSIONNAMEISRIGHT:
                     createDiscussion();
                     break;
+                case SAVEDISCUSSIONINFORMATION:
+                    saveDiscussionInformation();
+                    break;
                 case GETLOGINUSERFRIENDLIST:
                     getLoginUserFriendList();
                     break;
                 case FRIENDINFORMATIONLISTDOWNOVER:
                     getLoginUserFriendIDList(userFriendInformationList);
                     break;
-                case SAVEDISCUSSIONINFORMATION:
-                    saveDiscussionInformation();
-                    break;
                 case GETDISCUSSIONOBJECTID:
                     searchDiscussionInformation();
                     break;
                 case SAVEUSERDISCUSSION:
                     saveUserDiscussion();
-                    break;
-                case IFGETDISCUSSIONLIST:
-                    searchUserDiscussion();
-                    break;
-                case NOGETDISCUSSIONLIST:
-                    buildUserDiscussionList();
                     break;
             }
         }
@@ -233,7 +232,7 @@ public class AddChatActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void done(String s, BmobException e) {
                 if (e==null){
-                    handler.sendEmptyMessage(SAVEUSERDISCUSSION);
+                    handler.sendEmptyMessage(GETDISCUSSIONOBJECTID);
                     //Toast.makeText(getApplicationContext(), "成功储存讨论组数据", Toast.LENGTH_SHORT).show();
                 }else{
                     //Toast.makeText(getApplicationContext(), "储存讨论组数据失败"+e, Toast.LENGTH_SHORT).show();
@@ -245,16 +244,24 @@ public class AddChatActivity extends BaseActivity implements View.OnClickListene
      * bmob查询讨论组数据
      */
     private void searchDiscussionInformation(){
-        final BmobQuery<DiscussionIfm> query = new BmobQuery<DiscussionIfm>();
-        query.addWhereEqualTo("discussionID", discussionInformation.getDiscussionID());
-        query.findObjects(new FindListener<DiscussionIfm>() {
+        final BmobQuery<DiscussionIfm> disquery = new BmobQuery<DiscussionIfm>();
+        disquery.addWhereEqualTo("discussionID", discussionInformation.getDiscussionID());
+        disquery.findObjects(new FindListener<DiscussionIfm>() {
             @Override
             public void done(List<DiscussionIfm> object, BmobException e) {
                 if(e==null){
                     discussion =object.get(0);
+                    /*
+                    Toast.makeText(getApplicationContext(), discussion.getObjectId(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), discussion.getDiscussionID(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), discussion.getDiscussionUrl(), Toast.LENGTH_SHORT).show();
+                    Log.e(discussion.getObjectId(), "done: " );
+                    Log.e(discussion.getDiscussionID(), "done: " );
+                    Log.e(discussion.getDiscussionUrl(), "done: " );
+                    */
                     handler.sendEmptyMessage(SAVEUSERDISCUSSION);
                 }else{
-
+                    Log.e(e+"",e+"" );
                 }
             }
         });
@@ -263,7 +270,7 @@ public class AddChatActivity extends BaseActivity implements View.OnClickListene
      * bmob储存用户参加的讨论组
      */
     private void saveUserDiscussion(){
-        UserDiscussion userDiscussion = new UserDiscussion();
+        UserDis userDiscussion = new UserDis();
         userDiscussion.setObjectId(loginUserDiscussionObjectID);
         BmobRelation relation = new BmobRelation();
         //将当前讨论组添加到多对多关联中
@@ -277,7 +284,7 @@ public class AddChatActivity extends BaseActivity implements View.OnClickListene
                     Toast.makeText(getApplicationContext(), "添加成功", Toast.LENGTH_SHORT).show();
                 }else{
                     //Toast.makeText(getApplicationContext(), e+"添加失败", Toast.LENGTH_SHORT).show();
-                    Log.e(e+"", e+"" );
+                    Log.e(e+"", e+""+loginUserDiscussionObjectID );
                     Toast.makeText(getApplicationContext(), e+"讨论组储存失败", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -288,11 +295,11 @@ public class AddChatActivity extends BaseActivity implements View.OnClickListene
      * bmob查询某用户参加讨论组的信息
      */
     private void searchUserDiscussion(){
-        final BmobQuery<UserDiscussion> query = new BmobQuery<UserDiscussion>();
+        final BmobQuery<UserDis> query = new BmobQuery<UserDis>();
         query.addWhereEqualTo("userID", BmobUser.getCurrentUser(UserInformation.class).getPhone());
-        query.findObjects(new FindListener<UserDiscussion>() {
+        query.findObjects(new FindListener<UserDis>() {
             @Override
-            public void done(List<UserDiscussion> object, BmobException e) {
+            public void done(List<UserDis> object, BmobException e) {
                 if(e==null){
                     loginUserDiscussionObjectID =object.get(0).getObjectId();
                 }else{
@@ -306,10 +313,10 @@ public class AddChatActivity extends BaseActivity implements View.OnClickListene
      */
     private void buildUserDiscussionList(){
         String userID = BmobUser.getCurrentUser(UserInformation.class).getPhone();
-        UserDiscussion userDiscussion = new UserDiscussion();
+        UserDis userDiscussion = new UserDis();
+        BmobRelation bmobRelation = new BmobRelation();
         userDiscussion.setUserID(userID);
-        BmobRelation relation = new BmobRelation();
-        userDiscussion.setUserDis(relation);
+        userDiscussion.setUserDis(bmobRelation);
         userDiscussion.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {

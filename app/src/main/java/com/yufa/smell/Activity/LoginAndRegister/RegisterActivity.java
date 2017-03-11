@@ -219,7 +219,6 @@ public class RegisterActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 rongHandler.sendEmptyMessage(RFAIL);
-
             }
         }
     }

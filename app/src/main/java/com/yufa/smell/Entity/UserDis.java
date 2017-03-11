@@ -7,7 +7,7 @@ import cn.bmob.v3.datatype.BmobRelation;
  * Created by Administrator on 2017/3/5.
  */
 
-public class UserDiscussion extends BmobObject {
+public class UserDis extends BmobObject {
     private String userID;
     private BmobRelation userDis;
 

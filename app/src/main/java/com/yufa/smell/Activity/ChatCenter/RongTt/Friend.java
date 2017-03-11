@@ -1,8 +1,5 @@
 package com.yufa.smell.Activity.ChatCenter.RongTt;
 
-/**
- * Created by DELL on 2016/3/14.
- */
 public class Friend {
 
     private String userId;
